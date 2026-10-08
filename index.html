@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEUROSTEP-X | Human Mobility Intelligence</title>
+<style>
+:root{
+ --navy:#081a33; --blue:#1464d8; --cyan:#08b7c9; --green:#19a974;
+ --red:#e04b4b; --amber:#d9921e; --bg:#eef3f8; --card:#fff; --line:#d9e2ec;
+ --muted:#718198; --shadow:0 12px 32px rgba(8,26,51,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#f7faff,#edf3f9);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--navy)}
+.top{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
+.brand{display:flex;gap:12px;align-items:center}.mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--cyan));color:#fff;display:grid;place-items:center;font-weight:900}
+.brand b{font-size:19px;letter-spacing:.7px}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.topright{display:flex;align-items:center;gap:10px}.live{padding:8px 12px;border-radius:20px;background:#eaf9f3;color:var(--green);font-size:11px;font-weight:800}.live:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px}
+button{font:inherit;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;color:var(--navy);font-weight:700}
+button:hover{box-shadow:0 5px 15px rgba(8,26,51,.08)}button.danger{background:#fff0f0;color:var(--red);border-color:#f2cccc}
+.wrap{max-width:1540px;margin:auto;padding:22px}
+.hero{display:grid;grid-template-columns:1.65fr 1fr;gap:18px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);padding:17px}
+.heroMain{min-height:190px;background:radial-gradient(circle at 88% 15%,rgba(8,183,201,.15),transparent 28%),linear-gradient(120deg,#fff,#f6fbff);position:relative;overflow:hidden}
+.eyebrow{font-size:10px;letter-spacing:1.8px;color:var(--blue);font-weight:900;text-transform:uppercase}
+.hero h1{font-size:31px;margin:7px 0 6px}.hero p{color:var(--muted);max-width:730px;line-height:1.55;margin:0}
+.heroQuote{position:absolute;right:25px;bottom:17px;font-size:12px;color:var(--navy);font-weight:800;border-left:3px solid var(--cyan);padding-left:10px}
+.heroStats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}.stat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.stat strong{display:block;font-size:23px;margin:5px 0}.good{color:var(--green)}.warn{color:var(--amber)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+.title{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px}.title h2{font-size:15px;margin:0}.sub{font-size:11px;color:var(--muted);margin-top:3px}
+.chip{font-size:9px;padding:5px 8px;border-radius:9px;background:#f0f5fb;color:var(--blue);font-weight:800}
+.sensorGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sensor{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fbfdff}.sensor label{font-size:9px;color:var(--muted);text-transform:uppercase}.sensor b{display:block;font-size:19px;margin:4px 0}.sensor small{font-size:9px;color:var(--green)}
+.bar{height:5px;background:#e9eef4;border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:5px}
+.exo{height:310px;border-radius:15px;background:radial-gradient(circle at 50% 35%,#fff,#f2f7fc);border:1px solid var(--line);position:relative;overflow:hidden}
+.exo svg{width:100%;height:100%}.call{position:absolute;background:#fff;border:1px solid var(--line);border-radius:9px;padding:5px 8px;font-size:9px;box-shadow:0 5px 15px rgba(8,26,51,.08);font-weight:800}.call.a{left:7%;top:22%}.call.b{right:7%;top:37%}.call.c{left:8%;bottom:17%}.call.d{right:8%;bottom:15%}
+.phase{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0}.phase div{padding:9px 4px;text-align:center;border:1px solid var(--line);border-radius:9px;font-size:9px;color:var(--muted)}.phase .active{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:800}
+canvas{width:100%;height:190px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.legend{font-size:9px;color:var(--muted);display:flex;gap:15px;margin-top:7px}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.l1 i{background:var(--blue)}.l2 i{background:var(--cyan)}.l3 i{background:var(--amber)}
+.gaugeWrap{display:grid;grid-template-columns:160px 1fr;gap:15px;align-items:center}.gauge{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) 0 42%,#e8eef5 42%);position:relative}.gauge:after{content:"";width:108px;height:108px;background:#fff;border-radius:50%;position:absolute}.gauge .inside{position:relative;z-index:2;text-align:center}.gauge strong{font-size:29px}.gauge small{font-size:9px;color:var(--muted);display:block}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #edf1f5;font-size:11px}.row:last-child{border-bottom:0}.value{font-weight:800}.pill{font-size:9px;border-radius:10px;padding:4px 7px;font-weight:800}.safe{background:#eaf9f3;color:var(--green)}.attention{background:#fff6e5;color:var(--amber)}.stop{background:#ffeded;color:var(--red)}
+.energy{display:grid;grid-template-columns:150px 1fr;gap:15px}.battery{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) 0 72%,#e8eef4 72%);position:relative}.battery:after{content:"";width:94px;height:94px;background:#fff;border-radius:50%;position:absolute}.battery div{position:relative;z-index:2;text-align:center}.battery b{font-size:25px}.battery small{font-size:9px;color:var(--muted)}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.node{padding:10px;border:1px solid var(--line);border-radius:10px;text-align:center;min-width:92px;font-size:9px;font-weight:800;background:#fbfdff}.arrow{color:var(--cyan);font-weight:900}
+.safety{display:grid;gap:8px}.safety .row{border:1px solid var(--line);padding:10px;border-radius:10px;background:#fbfdff;border-bottom:1px solid var(--line)}
+.miniTable{width:100%;border-collapse:collapse;font-size:10px}.miniTable th,.miniTable td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}.miniTable th{color:var(--muted);font-weight:600}
+.controls{display:flex;gap:7px;flex-wrap:wrap}.controls button.active{background:var(--navy);color:#fff}
+.footer{text-align:center;color:var(--muted);font-size:9px;padding:20px}
+@media(max-width:1050px){.hero{grid-template-columns:1fr}.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="mark">NX</div><div><b>NEUROSTEP-X</b><small>HUMAN MOBILITY INTELLIGENCE • DIGITAL TWIN VIEW</small></div></div>
+  <div class="topright"><span class="live" id="live">SYSTEM LIVE • DEMO DATA</span><button id="pause">Pause</button><button class="danger" id="estop">Emergency Stop</button></div>
+</header>
+
+<main class="wrap">
+<section class="hero">
+ <div class="card heroMain">
+   <div class="eyebrow">Adaptive lower-limb assistance</div>
+   <h1>Assist only where the user needs support.</h1>
+   <p>NEUROSTEP-X converts movement, human effort and device-state signals into phase-aware assistance. The dashboard exposes the complete closed loop: <b>Sense → Understand → Assist → Measure → Adapt.</b></p>
+   <div class="heroQuote">Human-in-the-loop • Safety-first • Energy-aware</div>
+ </div>
+ <div class="heroStats">
+   <div class="stat"><span>System state</span><strong class="good" id="state">SAFE</strong><small>Safety gates armed</small></div>
+   <div class="stat"><span>Gait phase</span><strong id="phaseTop">STANCE</strong><small>Real-time phase estimate</small></div>
+   <div class="stat"><span>Adaptive support</span><strong id="assistTop">42%</strong><small>Bounded assistance command</small></div>
+   <div class="stat"><span>Battery</span><strong id="socTop">72%</strong><small>Energy-aware operation</small></div>
+ </div>
+</section>
+
+<section class="grid">
+ <div class="card c3">
+  <div class="title"><div><h2>Sensor Fusion</h2><div class="sub">Human + movement + device state</div></div><span class="chip">10 Hz DEMO</span></div>
+  <div class="sensorGrid">
+   <div class="sensor"><label>IMU orientation</label><b id="imu">8.4°</b><small>● healthy</small></div>
+   <div class="sensor"><label>EMG effort</label><b id="emg">38%</b><div class="bar"><i id="emgBar" style="width:38%"></i></div></div>
+   <div class="sensor"><label>Foot pressure</label><b id="pressure">61%</b><small>● stance contact</small></div>
+   <div class="sensor"><label>Interaction force</label><b id="force">118 N</b><small>● within envelope</small></div>
+   <div class="sensor"><label>Joint angle</label><b id="angle">34°</b><small>● encoder feedback</small></div>
+   <div class="sensor"><label>Motor current</label><b id="current">2.4 A</b><small>● current limit OK</small></div>
+   <div class="sensor"><label>Motor temperature</label><b id="temp">39°C</b><small>● thermal OK</small></div>
+   <div class="sensor"><label>Joint speed</label><b id="speed">46°/s</b><small>● motion detected</small></div>
+  </div>
+ </div>
+
+ <div class="card c5">
+  <div class="title"><div><h2>Gait Intelligence</h2><div class="sub">Phase detection + movement trend</div></div><span class="chip" id="intent">INTENT: WALK</span></div>
+  <div class="phase"><div>HEEL STRIKE</div><div class="active">STANCE</div><div>MID-STANCE</div><div>TOE-OFF</div><div>SWING</div></div>
+  <canvas id="gait"></canvas>
+  <div class="legend"><span class="l1"><i></i>Knee angle</span><span class="l2"><i></i>Assistance</span><span class="l3"><i></i>Motor load</span></div>
+ </div>
+
+ <div class="card c4">
+  <div class="title"><div><h2>Digital Exoskeleton</h2><div class="sub">Live component state</div></div><span class="chip">MODEL VIEW</span></div>
+  <div class="exo">
+   <svg viewBox="0 0 300 310" aria-label="stylized exoskeleton">
+    <defs><linearGradient id="metal" x1="0" x2="1"><stop offset="0" stop-color="#9aa9ba"/><stop offset=".5" stop-color="#edf2f6"/><stop offset="1" stop-color="#687b90"/></linearGradient></defs>
+    <circle cx="150" cy="45" r="22" fill="#dbe3ec"/>
+    <path d="M137 68 L128 135 L112 205 L105 275" fill="none" stroke="url(#metal)" stroke-width="22" stroke-linecap="round"/>
+    <path d="M163 68 L172 135 L188 205 L195 275" fill="none" stroke="url(#metal)" stroke-width="22" stroke-linecap="round"/>
+    <path d="M129 134 L171 134" stroke="#5e7187" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="129" cy="135" r="10" fill="#08b7c9"/><circle cx="171" cy="135" r="10" fill="#08b7c9"/>
+    <circle cx="112" cy="205" r="7" fill="#1464d8"/><circle cx="188" cy="205" r="7" fill="#1464d8"/>
+    <rect x="101" y="115" width="12" height="40" rx="5" fill="#081a33"/><rect x="187" y="115" width="12" height="40" rx="5" fill="#081a33"/>
+    <rect x="96" y="268" width="35" height="9" rx="4" fill="#081a33"/><rect x="169" y="268" width="35" height="9" rx="4" fill="#081a33"/>
+    <circle cx="150" cy="45" r="4" fill="#08b7c9"/>
+   </svg>
+   <span class="call a">IMU</span><span class="call b">KNEE ACTUATOR</span><span class="call c">PRESSURE</span><span class="call d">MOTOR CURRENT</span>
+  </div>
+ </div>
+
+ <div class="card c4">
+  <div class="title"><div><h2>Adaptive Assistance</h2><div class="sub">Effort-aware closed-loop control</div></div><span class="chip">AI / CONTROL</span></div>
+  <div class="gaugeWrap">
+   <div class="gauge" id="gauge"><div class="inside"><strong id="assist">42%</strong><small>ASSISTANCE</small></div></div>
+   <div>
+    <div class="row"><span>Estimated user effort</span><span class="value" id="effort">58%</span></div>
+    <div class="row"><span>Torque command</span><span class="value" id="torque">9.8 N·m</span></div>
+    <div class="row"><span>Control status</span><span class="pill safe" id="control">BOUNDED</span></div>
+    <div class="row"><span>Decision</span><span class="value" id="decision">MODERATE SUPPORT</span></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card c4">
+  <div class="title"><div><h2>Safety Command Center</h2><div class="sub">Deterministic gates above AI</div></div><span class="chip">FAIL-SAFE</span></div>
+  <div class="safety">
+   <div class="row"><span>Joint range</span><span class="pill safe" id="joint">SAFE</span></div>
+   <div class="row"><span>Motor current</span><span class="pill safe" id="currSafe">SAFE</span></div>
+   <div class="row"><span>Thermal limit</span><span class="pill safe" id="therm">SAFE</span></div>
+   <div class="row"><span>Emergency stop</span><span class="pill safe" id="esafe">ARMED</span></div>
+   <div class="row"><span>System heartbeat</span><span class="pill safe">ONLINE</span></div>
+  </div>
+ </div>
+
+ <div class="card c4">
+  <div class="title"><div><h2>Energy Intelligence</h2><div class="sub">Solar supplementary input</div></div><span class="chip">POWER</span></div>
+  <div class="energy">
+   <div class="battery" id="battery"><div><b id="soc">72%</b><small>BATTERY SOC</small></div></div>
+   <div>
+    <div class="row"><span>Flexible solar</span><span class="value" id="solar">8.6 W</span></div>
+    <div class="row"><span>System demand</span><span class="value" id="power">82 W</span></div>
+    <div class="row"><span>Regeneration</span><span class="value" id="regen">1.1 W</span></div>
+    <div class="row"><span>Energy mode</span><span class="pill safe">OPTIMIZED</span></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card c8">
+  <div class="title"><div><h2>Closed-Loop Telemetry</h2><div class="sub">The judge can see the complete decision chain</div></div><span class="chip">LIVE TREND</span></div>
+  <canvas id="trend"></canvas>
+  <div class="flow" style="margin-top:12px">
+   <div class="node">SENSORS<br><span style="color:#718198">IMU • EMG • FSR</span></div><div class="arrow">→</div>
+   <div class="node">FUSION<br><span style="color:#718198">FILTER + SYNC</span></div><div class="arrow">→</div>
+   <div class="node">INTENT<br><span style="color:#718198">GAIT PHASE</span></div><div class="arrow">→</div>
+   <div class="node">CONTROL<br><span style="color:#718198">TORQUE</span></div><div class="arrow">→</div>
+   <div class="node">ACTUATOR<br><span style="color:#718198">ASSIST</span></div><div class="arrow">↺</div>
+  </div>
+ </div>
+
+ <div class="card c4">
+  <div class="title"><div><h2>IoT / Research Console</h2><div class="sub">MQTT-ready telemetry model</div></div><span class="chip">NX-PROT-01</span></div>
+  <table class="miniTable">
+   <tr><th>Controller</th><td>ESP32 / STM32</td></tr>
+   <tr><th>Protocol</th><td>MQTT / Wi-Fi / BLE</td></tr>
+   <tr><th>Update rate</th><td>10 Hz demo</td></tr>
+   <tr><th>Last packet</th><td id="packet">--:--:--</td></tr>
+   <tr><th>Data state</th><td>LOCAL DEMO</td></tr>
+   <tr><th>Clinical state</th><td>NOT CERTIFIED</td></tr>
+  </table>
+  <div class="controls" style="margin-top:12px">
+   <button class="active" id="adaptive">Adaptive</button><button id="rig">Rig Test</button><button id="idle">Idle</button>
+  </div>
+ </div>
+
+ <div class="card c12">
+  <div class="title"><div><h2>Prototype Demonstration Modes</h2><div class="sub">Use these modes during the judging demonstration</div></div><span class="chip">SAFE DEMO</span></div>
+  <div class="controls">
+   <button class="active" id="m1">01 • Normal gait</button>
+   <button id="m2">02 • Simulated weakness</button>
+   <button id="m3">03 • Start / stop</button>
+   <button id="m4">04 • High-load safety</button>
+  </div>
+  <p id="demoText" style="font-size:11px;color:var(--muted);margin:12px 0 0">Normal gait: sensor fusion tracks phase and the controller applies moderate assistance within safety bounds.</p>
+ </div>
+</section>
+</main>
+<div class="footer">NEUROSTEP-X • Research prototype dashboard • Demo telemetry is simulated until connected to physical sensors • Not a certified medical device</div>
+
+<script>
+let run=true, stop=false, mode="Adaptive", demo=1, t=0, soc=72;
+let A=[],B=[],C=[];
+const $=x=>document.getElementById(x), phases=["HEEL STRIKE","STANCE","MID-STANCE","TOE-OFF","SWING"];
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function rnd(a,b){return a+Math.random()*(b-a)}
+function push(a,v){a.push(v);if(a.length>70)a.shift()}
+function chart(el,a,b,c){
+ let r=el.getBoundingClientRect(),d=devicePixelRatio||1,ctx=el.getContext("2d"),w=r.width,h=r.height;
+ el.width=w*d;el.height=h*d;ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
+ ctx.strokeStyle="#e5ebf2";ctx.lineWidth=1;
+ for(let i=0;i<5;i++){let y=20+i*(h-40)/4;ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(w-12,y);ctx.stroke()}
+ function line(arr,col,max=100){if(arr.length<2)return;ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=2;arr.forEach((v,i)=>{let x=28+i*(w-40)/(arr.length-1),y=h-20-v/max*(h-40);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()}
+ line(a,"#1464d8");line(b,"#08b7c9");line(c,"#d9921e");
+}
+function setPill(id,bad,stopText=false){let e=$(id);e.textContent=stopText?"TRIPPED":bad?"ATTENTION":id==="esafe"?"ARMED":"SAFE";e.className="pill "+(stopText?"stop":bad?"attention":"safe")}
+function phaseUI(i){document.querySelectorAll(".phase div").forEach((e,k)=>e.classList.toggle("active",k===i));$("phaseTop").textContent=phases[i]}
+function setMode(m,btn){mode=m;document.querySelectorAll(".controls button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
+function tick(){
+ if(!run)return;
+ t+=.2;
+ let i=Math.floor((t/1.25)%5); if(stop)i=1;phaseUI(i);
+ let angle=stop?0:clamp(34+22*Math.sin(t)+rnd(-2,2),0,72);
+ let effort=stop?0:clamp(58+18*Math.sin(t*.65)+rnd(-3,3),10,92);
+ let assist=stop?0:clamp(100-effort+8*Math.sin(t*1.4),8,78);
+ if(mode==="Rig Test"){effort=45+8*Math.sin(t);assist=60+10*Math.sin(t*.7)}
+ if(mode==="Idle"){effort=0;assist=0;angle=0}
+ if(demo===2){effort=clamp(effort-18,8,80);assist=clamp(assist+18,10,88)}
+ if(demo===3 && Math.sin(t*1.1)<-.55){effort=0;assist=0}
+ if(demo===4){assist=clamp(assist+12,10,90)}
+ let current=stop?0:clamp(1.2+assist/29+rnd(-.12,.12),0,6.2);
+ let temp=clamp(37+current*1.3+rnd(-.3,.3),34,58);
+ let force=stop?0:clamp(65+assist*1.2+rnd(-8,8),20,185);
+ let pressure=stop?0:clamp(i<3?67:30+rnd(-6,6),0,100);
+ let speed=stop?0:Math.abs(48*Math.cos(t))+rnd(0,7);
+ let torque=assist*.235;
+ soc=clamp(soc-(stop?0.001:(.004+current*.0007)),15,100);
+ let solar=clamp(8.2+2.3*Math.sin(t*.11)+rnd(-.3,.3),0,12), power=stop?5:clamp(34+current*19+rnd(-3,3),20,150),regen=clamp(1.1+1.3*Math.max(0,-Math.sin(t))+rnd(-.1,.1),0,4);
+ $("imu").textContent=(8+7*Math.sin(t*.5)).toFixed(1)+"°";$("emg").textContent=effort.toFixed(0)+"%";$("emgBar").style.width=effort+"%";
+ $("pressure").textContent=pressure.toFixed(0)+"%";$("force").textContent=force.toFixed(0)+" N";$("angle").textContent=angle.toFixed(0)+"°";$("current").textContent=current.toFixed(1)+" A";$("temp").textContent=temp.toFixed(0)+"°C";$("speed").textContent=speed.toFixed(0)+"°/s";
+ $("assist").textContent=assist.toFixed(0)+"%";$("assistTop").textContent=assist.toFixed(0)+"%";$("effort").textContent=effort.toFixed(0)+"%";$("torque").textContent=torque.toFixed(1)+" N·m";
+ $("gauge").style.background=`conic-gradient(#1464d8 0 ${assist}%,#e8eef5 ${assist}% 100%)`;
+ $("soc").textContent=soc.toFixed(0)+"%";$("socTop").textContent=soc.toFixed(0)+"%";$("battery").style.background=`conic-gradient(#19a974 0 ${soc}%,#e8eef4 ${soc}% 100%)`;
+ $("solar").textContent=solar.toFixed(1)+" W";$("power").textContent=power.toFixed(0)+" W";$("regen").textContent=regen.toFixed(1)+" W";
+ let jbad=angle>67, cbad=current>5.2,tbad=temp>51;
+ setPill("joint",jbad);setPill("currSafe",cbad);setPill("therm",tbad);setPill("esafe",false,stop);
+ $("state").textContent=stop?"STOPPED":(jbad||cbad||tbad?"ATTENTION":"SAFE");$("state").className=(stop||jbad||cbad||tbad)?"warn":"good";
+ $("control").textContent=stop?"LOCKED":(jbad||cbad||tbad?"LIMITING":"BOUNDED");$("control").className="pill "+(stop||jbad||cbad||tbad?"attention":"safe");
+ $("decision").textContent=stop?"EMERGENCY STOP":assist>65?"HIGH SUPPORT":assist<30?"LIGHT SUPPORT":"MODERATE SUPPORT";
+ $("intent").textContent=demo===3?"INTENT: START / STOP":demo===2?"INTENT: ASYMMETRIC WALK":"INTENT: WALK";
+ $("packet").textContent=new Date().toLocaleTimeString();
+ push(A,angle);push(B,assist);push(C,current/6.5*100);
+ chart($("gait"),A,B,C);chart($("trend"),B,A,C);
+}
+$("pause").onclick=()=>{run=!run;$("pause").textContent=run?"Pause":"Resume"}
+$("estop").onclick=()=>{stop=!stop;$("estop").textContent=stop?"Reset E-Stop":"Emergency Stop";if(stop){$("live").textContent="SAFETY STOP • ACTUATION DISABLED";$("live").style.color="#e04b4b";$("live").style.background="#ffeded"}else{$("live").textContent="SYSTEM LIVE • DEMO DATA";$("live").style.color="#19a974";$("live").style.background="#eaf9f3"}}
+$("adaptive").onclick=function(){setMode("Adaptive",this)};$("rig").onclick=function(){setMode("Rig Test",this)};$("idle").onclick=function(){setMode("Idle",this)}
+function demoBtn(id,n,text){$(id).onclick=function(){demo=n;document.querySelectorAll(".c12 .controls button").forEach(x=>x.classList.remove("active"));this.classList.add("active");$("demoText").textContent=text}}
+demoBtn("m1",1,"Normal gait: sensor fusion tracks gait phase and the controller applies moderate assistance within safety bounds.");
+demoBtn("m2",2,"Simulated weakness: the dashboard visualizes increased assistance as estimated user contribution decreases.");
+demoBtn("m3",3,"Start / stop: intent state changes and assistance is reduced to zero during the simulated stop condition.");
+demoBtn("m4",4,"High-load safety: the demo increases commanded assistance to show how bounded safety monitoring can trigger limiting.");
+for(let i=0;i<55;i++){let x=i*.25;push(A,35+20*Math.sin(x));push(B,42+15*Math.sin(x*.8));push(C,28+15*Math.sin(x*.5))}
+window.addEventListener("resize",()=>{chart($("gait"),A,B,C);chart($("trend"),B,A,C)});tick();setInterval(tick,420);
+</script>
+</body>
+</html>
