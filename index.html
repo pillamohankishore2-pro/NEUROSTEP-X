@@ -46,12 +46,56 @@ canvas{width:100%;height:190px;border:1px solid var(--line);border-radius:12px;b
 .controls{display:flex;gap:7px;flex-wrap:wrap}.controls button.active{background:var(--navy);color:#fff}
 .footer{text-align:center;color:var(--muted);font-size:9px;padding:20px}
 @media(max-width:1050px){.hero{grid-template-columns:1fr}.c3,.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
+
+.loginOverlay{position:fixed;inset:0;background:linear-gradient(135deg,#07182f,#0c3558);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginBox{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.loginLogo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#081a33,#08b7c9);display:grid;place-items:center;color:#fff;font-weight:900;margin-bottom:16px}
+.loginBox h2{margin:0 0 6px;font-size:25px}.loginBox p{color:#718198;font-size:12px;line-height:1.5}
+.loginBox label{display:block;font-size:11px;font-weight:800;color:#51657e;margin:13px 0 6px}
+.loginBox input{width:100%;padding:12px;border:1px solid #d9e2ec;border-radius:10px;font-size:14px;outline:none}
+.loginBox input:focus{border-color:#1464d8;box-shadow:0 0 0 3px rgba(20,100,216,.08)}
+.loginBtn{width:100%;margin-top:17px;background:#081a33!important;color:#fff!important;border:0!important;padding:12px!important}
+.loginError{color:#e04b4b;font-size:11px;margin-top:9px;min-height:15px}
+.demoCred{background:#f4f8fc;border:1px solid #dfe7ef;border-radius:11px;padding:10px;margin-top:14px;font-size:10px;color:#718198;line-height:1.6}
+.userMenu{font-size:10px;color:#718198;background:#f5f8fc;border:1px solid #dce5ee;border-radius:10px;padding:8px 10px}
+.healthHero{background:linear-gradient(120deg,#fff,#f4fbff)}
+.aiBadge{background:#eef6ff;color:#1464d8;border:1px solid #d4e5fb;padding:5px 8px;border-radius:9px;font-size:9px;font-weight:900}
+.healthGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.healthMetric{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdff}
+.healthMetric label{font-size:9px;color:var(--muted);text-transform:uppercase}
+.healthMetric b{display:block;font-size:20px;margin-top:5px}
+.healthMetric small{font-size:9px;color:var(--muted)}
+.insight{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fbfdff;margin-bottom:9px}
+.insightHead{display:flex;justify-content:space-between;align-items:center}.insight h4{margin:0;font-size:12px}.insight p{font-size:10px;color:var(--muted);line-height:1.5;margin:7px 0 0}
+.risk{font-size:9px;font-weight:900;border-radius:10px;padding:4px 7px}.risk.low{background:#eaf9f3;color:#169b62}.risk.mod{background:#fff5df;color:#d9921e}.risk.high{background:#ffeded;color:#e04b4b}
+.aiSummary{border-left:4px solid #08b7c9;background:#f1fbfd;padding:12px;border-radius:10px;font-size:11px;line-height:1.55;color:#29425f}
+.healthDisclaimer{font-size:9px;color:#7c8795;line-height:1.5;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+@media(max-width:800px){.healthGrid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+<div class="loginOverlay" id="loginOverlay">
+  <div class="loginBox">
+    <div class="loginLogo">NX</div>
+    <div class="eyebrow">Secure demo access</div>
+    <h2>NEUROSTEP-X Portal</h2>
+    <p>Sign in to access the assistive-mobility dashboard and the AI-assisted wellness/rehabilitation analytics view.</p>
+    <label>Username</label>
+    <input id="loginUser" autocomplete="username" placeholder="Enter username">
+    <label>Password</label>
+    <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password">
+    <button class="loginBtn" id="loginBtn">Sign in</button>
+    <div class="loginError" id="loginError"></div>
+    <div class="demoCred"><b>Competition demo credentials</b><br>
+      User: <b>patient_demo</b> &nbsp; Password: <b>Neuro@123</b><br>
+      Supervisor: <b>clinician_demo</b> &nbsp; Password: <b>Care@123</b>
+    </div>
+  </div>
+</div>
+
 <header class="top">
   <div class="brand"><div class="mark">NX</div><div><b>NEUROSTEP-X</b><small>HUMAN MOBILITY INTELLIGENCE • DIGITAL TWIN VIEW</small></div></div>
-  <div class="topright"><span class="live" id="live">SYSTEM LIVE • DEMO DATA</span><button id="pause">Pause</button><button class="danger" id="estop">Emergency Stop</button></div>
+  <div class="topright"><span class="userMenu" id="userMenu">Not signed in</span><span class="live" id="live">SYSTEM LIVE • DEMO DATA</span><button id="pause">Pause</button><button class="danger" id="estop">Emergency Stop</button><button id="logout">Logout</button></div>
 </header>
 
 <main class="wrap">
@@ -68,9 +112,33 @@ canvas{width:100%;height:190px;border:1px solid var(--line);border-radius:12px;b
    <div class="stat"><span>Adaptive support</span><strong id="assistTop">42%</strong><small>Bounded assistance command</small></div>
    <div class="stat"><span>Battery</span><strong id="socTop">72%</strong><small>Energy-aware operation</small></div>
  </div>
+
+</section>
+
+<section class="grid" style="margin-bottom:18px">
+ <div class="card c12 healthHero">
+  <div class="title">
+   <div><h2>AI-Assisted User Health & Rehabilitation Analytics</h2>
+   <div class="sub">Trend interpretation from gait, effort and optional wearable vitals • decision support, not diagnosis</div></div>
+   <span class="aiBadge">AI INSIGHT ENGINE</span>
+  </div>
+  <div class="healthGrid">
+   <div class="healthMetric"><label>Gait symmetry</label><b id="symmetry">91%</b><small id="symmetryText">balanced pattern</small></div>
+   <div class="healthMetric"><label>Walking cadence</label><b id="cadence">74</b><small>steps/min</small></div>
+   <div class="healthMetric"><label>Heart rate*</label><b id="hr">78 bpm</b><small>optional wearable input</small></div>
+   <div class="healthMetric"><label>SpO₂*</label><b id="spo2">98%</b><small>optional wearable input</small></div>
+  </div>
+  <div style="margin-top:12px">
+   <div class="insight"><div class="insightHead"><h4>AI Gait Pattern</h4><span class="risk low" id="gaitRisk">LOW CONCERN</span></div><p id="gaitInsight">Current simulated gait trend is stable. No persistent asymmetry pattern is being flagged.</p></div>
+   <div class="insight"><div class="insightHead"><h4>Fatigue / Effort Trend</h4><span class="risk low" id="fatigueRisk">LOW</span></div><p id="fatigueInsight">User effort is within the current demonstration range. The controller is avoiding unnecessary assistance.</p></div>
+   <div class="aiSummary" id="aiSummary"><b>AI summary:</b> Stable demonstration profile. Continue monitoring gait symmetry, effort and device-state signals during the next test interval.</div>
+  </div>
+  <div class="healthDisclaimer">*Heart-rate and SpO₂ values are optional prototype inputs shown for demonstration. This module is not a medical diagnostic system. Any real health alert must be validated with appropriate sensors, clinical protocols and professional oversight.</div>
+ </div>
 </section>
 
 <section class="grid">
+
  <div class="card c3">
   <div class="title"><div><h2>Sensor Fusion</h2><div class="sub">Human + movement + device state</div></div><span class="chip">10 Hz DEMO</span></div>
   <div class="sensorGrid">
@@ -241,6 +309,7 @@ function tick(){
  $("intent").textContent=demo===3?"INTENT: START / STOP":demo===2?"INTENT: ASYMMETRIC WALK":"INTENT: WALK";
  $("packet").textContent=new Date().toLocaleTimeString();
  push(A,angle);push(B,assist);push(C,current/6.5*100);
+ updateAI(effort,angle,pressure);
  chart($("gait"),A,B,C);chart($("trend"),B,A,C);
 }
 $("pause").onclick=()=>{run=!run;$("pause").textContent=run?"Pause":"Resume"}
@@ -252,7 +321,56 @@ demoBtn("m2",2,"Simulated weakness: the dashboard visualizes increased assistanc
 demoBtn("m3",3,"Start / stop: intent state changes and assistance is reduced to zero during the simulated stop condition.");
 demoBtn("m4",4,"High-load safety: the demo increases commanded assistance to show how bounded safety monitoring can trigger limiting.");
 for(let i=0;i<55;i++){let x=i*.25;push(A,35+20*Math.sin(x));push(B,42+15*Math.sin(x*.8));push(C,28+15*Math.sin(x*.5))}
-window.addEventListener("resize",()=>{chart($("gait"),A,B,C);chart($("trend"),B,A,C)});tick();setInterval(tick,420);
+
+// Demo-only authentication: credentials are intentionally client-side for a presentation prototype.
+// Production authentication must use a backend, hashed passwords, HTTPS, sessions and access control.
+const DEMO_USERS={
+  patient_demo:{password:"Neuro@123",role:"User"},
+  clinician_demo:{password:"Care@123",role:"Supervisor"}
+};
+let currentUser=null;
+function doLogin(){
+  const u=$("loginUser").value.trim(), pw=$("loginPass").value;
+  if(DEMO_USERS[u] && DEMO_USERS[u].password===pw){
+    currentUser={username:u,role:DEMO_USERS[u].role};
+    $("loginOverlay").style.display="none";
+    $("userMenu").textContent=u+" • "+DEMO_USERS[u].role;
+    $("loginError").textContent="";
+  }else $("loginError").textContent="Invalid demo credentials.";
+}
+$("loginBtn").onclick=doLogin;
+$("loginPass").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+$("logout").onclick=()=>{
+  currentUser=null;$("loginOverlay").style.display="flex";$("loginUser").value="";$("loginPass").value="";
+  $("userMenu").textContent="Not signed in";
+};
+function updateAI(effort,angle,pressure){
+  const symmetry=clamp(97-Math.abs(angle-34)*0.55-rnd(0,3),72,98);
+  const cadence=clamp(76+10*Math.sin(t*.45)+rnd(-2,2),55,100);
+  const hr=clamp(78+10*Math.sin(t*.18)+rnd(-2,2),60,105);
+  const spo2=clamp(98-rnd(0,.7),94,99);
+  $("symmetry").textContent=symmetry.toFixed(0)+"%";
+  $("symmetryText").textContent=symmetry>88?"balanced pattern":symmetry>80?"mild asymmetry":"asymmetry trend";
+  $("cadence").textContent=cadence.toFixed(0);
+  $("hr").textContent=hr.toFixed(0)+" bpm";$("spo2").textContent=spo2.toFixed(0)+"%";
+  const gaitConcern=symmetry<82, fatigueConcern=effort>82;
+  $("gaitRisk").textContent=gaitConcern?"REVIEW":"LOW CONCERN";
+  $("gaitRisk").className="risk "+(gaitConcern?"mod":"low");
+  $("fatigueRisk").textContent=fatigueConcern?"ELEVATED":"LOW";
+  $("fatigueRisk").className="risk "+(fatigueConcern?"mod":"low");
+  $("gaitInsight").textContent=gaitConcern
+    ?"The simulated trend shows increased asymmetry. In a real deployment this should trigger a review rather than an automatic medical conclusion."
+    :"Current simulated gait trend is stable. No persistent asymmetry pattern is being flagged.";
+  $("fatigueInsight").textContent=fatigueConcern
+    ?"Observed effort is elevated. The prototype can increase assistance within predefined safety limits and request a supervised review."
+    :"User effort is within the current demonstration range. The controller is avoiding unnecessary assistance.";
+  $("aiSummary").innerHTML="<b>AI summary:</b> "+(gaitConcern||fatigueConcern
+    ?"A change in the measured trend has been detected. Continue the controlled test and review the underlying sensor signals."
+    :"Stable demonstration profile. Continue monitoring gait symmetry, effort and device-state signals during the next test interval.");
+}
+window.addEventListener("resize",()=>{chart($("gait"),A,B,C);chart($("trend"),B,A,C)});
+tick();setInterval(tick,420);
+
 </script>
 </body>
 </html>
